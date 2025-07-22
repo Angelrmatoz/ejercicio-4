@@ -1,10 +1,11 @@
-const express = require('express');
+/* eslint-env node */
+import express from 'express';
+import cors from 'cors';
+import mongoose from 'mongoose';
+import morgan from 'morgan';
+import dotenv from 'dotenv';
+dotenv.config();
 const app = express();
-const cors = require('cors');
-const mongoose = require('mongoose');
-
-const morgan = require('morgan');
-require('dotenv').config();
 
 app.use(morgan('tiny'));
 app.use(cors());
@@ -19,6 +20,7 @@ const blogSchema = new mongoose.Schema({
 
 const Blog = mongoose.model('Blog', blogSchema)
 
+// eslint-disable-next-line no-undef
 const mongoUrl = process.env.MONGODB_URI;
 mongoose.connect(mongoUrl)
 
