@@ -1,12 +1,16 @@
-# React + Vite
+# Full Stack Open - Parte 4
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+En esta parte, continuaremos nuestro trabajo en el backend. Nuestro primer tema principal será escribir pruebas de unidad e integración para el backend. Una vez que hayamos cubierto las pruebas, analizaremos la implementación de la autenticación y autorización de usuario.
 
-Currently, two official plugins are available:
+## Contenido de la Parte 4
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Pruebas de unidad e integración para el backend
+- Test runner integrado de Node (reemplazando Jest)
+- Implementación de autenticación de usuario
+- Implementación de autorización de usuario
 
-## Expanding the ESLint configuration
+## Actualizaciones
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Parte actualizada el 13 de Febrero de 2024
+
+**Cambio importante:** Jest reemplazado con el test runner integrado de Node
