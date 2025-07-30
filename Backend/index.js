@@ -12,7 +12,10 @@ app.use(express.json());
 
 app.use('/api/blogs', blogsRouter);
 
-const PORT = config.PORT;
-app.listen(config.PORT, () => {
-    console.log(`Server running on port ${PORT}`)
-});   
+if (process.env.NODE_ENV !== 'test') {
+    app.listen(config.PORT, () => {
+        console.log(`Server running on port ${config.PORT}`);
+    });
+}
+
+export default app;
