@@ -33,6 +33,31 @@ test('la propiedad única de los blogs es id, no _id', async () => {
     });
 });
 
+test('se crea un nuevo blog con POST', async () => { 
+    const nuevoBlog = {
+        title: "Blog nuevo",
+        author: "Autor nuevo",
+        url: "http://ejemplo.com/nuevo",
+        likes: 7
+    };
+
+    const blogsAntes = await api.get('/api/blogs');
+    const cantidadAntes = blogsAntes.body.length;
+
+    await api
+        .post('/api/blogs')
+        .send(nuevoBlog)
+        .expect(201)
+        .expect('Content-Type', /application\/json/);
+    
+    const blogsDespues = await api.get('/api/blogs');
+    const cantidadDespues = blogsDespues.body.length;
+
+    expect(cantidadDespues).toBe(cantidadAntes + 1);
+    const titulos = blogsDespues.body.map(blog => blog.title);
+    expect(titulos).toContain(nuevoBlog.title);
+});
+
 afterAll(() => {
     mongoose.connection.close();
 });
