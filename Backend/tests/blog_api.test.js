@@ -1,3 +1,5 @@
+/* eslint-env jest */
+
 import mongoose from "mongoose";
 import supertest from "supertest";
 import app from "../index.js"; // Adjust the import based on your file structure
@@ -16,13 +18,21 @@ beforeEach(async () => {
     await Blog.insertMany(blogObjects);
 });
 
-test('los blogs se devuelven como json', async () => { 
+test('los blogs se devuelven como json', async () => {
     await api
         .get('/api/blogs')
         .expect(200)
         .expect('Content-Type', /application\/json/);
 });
 
-afterAll(() => { 
+test('la propiedad única de los blogs es id, no _id', async () => {
+    const response = await api.get('/api/blogs');
+    response.body.forEach(blog => {
+        expect(blog.id).toBeDefined();
+        expect(blog._id).toBeUndefined();
+    });
+});
+
+afterAll(() => {
     mongoose.connection.close();
 });

@@ -12,6 +12,7 @@ app.use(express.json());
 
 app.use('/api/blogs', blogsRouter);
 
+// eslint-disable-next-line no-undef
 if (process.env.NODE_ENV !== 'test') {
     app.listen(config.PORT, () => {
         console.log(`Server running on port ${config.PORT}`);
