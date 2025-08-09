@@ -4,7 +4,7 @@ import express from 'express';
 const blogsRouter = express.Router();
 
 blogsRouter.get('/', async (request, response) => {
-    const blogs = await Blog.find({});
+    const blogs = await Blog.find({}).populate('user', { username: 1, name: 1 });
     response.json(blogs);
 });
 
@@ -21,7 +21,13 @@ blogsRouter.post('/', async (request, response) => {
 
     const blog = new Blog({ title, author, url, likes });
     const result = await blog.save();
-    response.status(201).json(result);
+
+    user.blogs = user.blogs.concat(savedBlog._id);
+    await user.save();
+
+    const populatedBlog = await result.populate('user', { username: 1, name: 1 });
+
+    response.status(201).json(populatedBlog);
 });
 
 blogsRouter.delete('/:id', async (request, response) => {
