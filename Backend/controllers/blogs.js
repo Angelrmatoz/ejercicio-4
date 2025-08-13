@@ -21,7 +21,7 @@ blogsRouter.post('/', async (request, response) => {
     const { title, author, url, likes } = request.body;
 
     const decodedToken = jwt.verify(getTokenFrom(request), process.env.SECRET);
-    
+
     if (!decodedToken.id) {
         return response.status(401).json({
             error: 'token invalid'
@@ -46,13 +46,13 @@ blogsRouter.post('/', async (request, response) => {
         return response.status(400).json({ error: 'likes is missing' });
     }
 
-    const blog = new Blog({ title, author, url, likes });
-    const result = await blog.save();
+    const blog = new Blog({ title, author, url, likes, user: user._id });
+    const savedBlog = await blog.save();
 
     user.blogs = user.blogs.concat(savedBlog._id);
     await user.save();
 
-    const populatedBlog = await result.populate('user', { username: 1, name: 1 });
+    const populatedBlog = await savedBlog.populate('user', { username: 1, name: 1 });
 
     response.status(201).json(populatedBlog);
 });
