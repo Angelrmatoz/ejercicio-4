@@ -9,13 +9,6 @@ beforeEach(async () => {
     await User.deleteMany({});
 });
 
-test('GET /api/users', async () => {
-    await api
-        .get('/api/users')
-        .expect(200)
-        .expect('Content-Type', /application\/json/);
-});
-
 test('POST /api/users', async () => {
     const newUser = {
         username: 'johndoe',
@@ -32,6 +25,13 @@ test('POST /api/users', async () => {
     const usersAtEnd = await api.get('/api/users');
     const usernames = usersAtEnd.body.map(u => u.username);
     expect(usernames).toContain(newUser.username);
+});
+
+test('GET /api/users', async () => {
+    await api
+        .get('/api/users')
+        .expect(200)
+        .expect('Content-Type', /application\/json/);
 });
 
 afterAll(async () => {
