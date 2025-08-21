@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import Blog from "./components/Blog";
 import blogService from "./services/blogs";
 import loginService from "./services/login";
+import Notification from "./components/Notification";
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
@@ -9,6 +10,7 @@ const App = () => {
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
   const [newBlog, setNewBlog] = useState({ title: "", author: "", url: "" });
+  const [notification, setNotification] = useState({ message: "", type: "" });
 
   const handleLogin = async (event) => {
     event.preventDefault();
@@ -40,13 +42,31 @@ const App = () => {
         title,
         author,
         url,
-        likes: 0
+        likes: 0,
       });
+
       setBlogs(blogs.concat(createdBlog));
       setNewBlog({ title: "", author: "", url: "" });
       event.target.reset();
+
+      setNotification({
+        message: `A new blog '${createdBlog.title}' by ${createdBlog.author} added`,
+        type: "success",
+      });
+
+      setTimeout(() => {
+        setNotification({ message: "", type: "" });
+      }, 4000);
     } catch (exception) {
       console.error("Failed to create blog:", exception);
+      setNotification({
+        message: "Failed to create blog",
+        type: "error",
+      });
+
+      setTimeout(() => {
+        setNotification({ message: "", type: "" });
+      }, 4000);
     }
   };
 
@@ -69,6 +89,7 @@ const App = () => {
     return (
       <div>
         <h2>Log in to application</h2>
+        <Notification message={notification.message} type={notification.type} />
         <form onSubmit={handleLogin}>
           <label htmlFor="username">Username</label>
           <input
@@ -95,6 +116,7 @@ const App = () => {
   return (
     <div>
       <h2>blogs</h2>
+      <Notification message={notification.message} type={notification.type} />
       <h3>
         {user.name} logged in
         <button
@@ -110,13 +132,28 @@ const App = () => {
 
       <form onSubmit={handleCreateBlog}>
         <label htmlFor="title">Title</label>
-        <input id="title" type="text" value={newBlog.title} onChange={(e) => setNewBlog({ ...newBlog, title: e.target.value })} />
+        <input
+          id="title"
+          type="text"
+          value={newBlog.title}
+          onChange={(e) => setNewBlog({ ...newBlog, title: e.target.value })}
+        />
         <br />
         <label htmlFor="author">Author</label>
-        <input id="author" type="text" value={newBlog.author} onChange={(e) => setNewBlog({ ...newBlog, author: e.target.value })} />
+        <input
+          id="author"
+          type="text"
+          value={newBlog.author}
+          onChange={(e) => setNewBlog({ ...newBlog, author: e.target.value })}
+        />
         <br />
         <label htmlFor="url">URL</label>
-        <input id="url" type="text" value={newBlog.url} onChange={(e) => setNewBlog({ ...newBlog, url: e.target.value })} />
+        <input
+          id="url"
+          type="text"
+          value={newBlog.url}
+          onChange={(e) => setNewBlog({ ...newBlog, url: e.target.value })}
+        />
         <br />
         <button type="submit">Create</button>
       </form>
