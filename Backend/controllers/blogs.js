@@ -66,14 +66,21 @@ blogsRouter.delete('/:id', async (request, response) => {
 
 blogsRouter.put('/:id', async (request, response) => {
     const { id } = request.params;
+    const body = { ...request.body };
 
-    const blogActualizado = await Blog.findByIdAndUpdate(id, request.body, { new: true, runValidators: true });
+    if (body.user && typeof body.user === 'object' && (body.user.id || body.user._id)) {
+        body.user = body.user.id || body.user._id;
+    }
+
+    const blogActualizado = await Blog.findByIdAndUpdate(id, body, { new: true, runValidators: true });
 
     if (!blogActualizado) {
         return response.status(404).end();
     }
 
-    response.json(blogActualizado);
+    const populatedBlog = await blogActualizado.populate('user', { username: 1, name: 1 });
+
+    response.json(populatedBlog);
 });
 
 export default blogsRouter;
