@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import Blog from "../Blog";
-import { expect } from "vitest";
+import { expect, vi } from "vitest";
 
 test("muestra el título, autor, url y likes del blog", async () => {
   const blog = {
@@ -12,7 +12,7 @@ test("muestra el título, autor, url y likes del blog", async () => {
     user: { name: "John Doe", id: "123" },
   };
 
-  const handleLike = () => {};
+  const handleLike = vi.fn();
   const handleRemove = () => {};
   const currentUser = { name: "John Doe", id: "123" };
 
@@ -38,8 +38,16 @@ test("muestra el título, autor, url y likes del blog", async () => {
   const button = screen.getByText(/ver más|view/i);
   await user.click(button);
 
-    expect(screen.getByText(blog.url)).toBeDefined();
-    expect(screen.getByText((content, element) =>
-      content.includes("5") && content.includes("likes")
-    )).toBeDefined();
+  const likeButton = screen.getByText(/like/i, { selector: "button" });
+  await user.click(likeButton);
+  await user.click(likeButton);
+
+  expect(screen.getByText(blog.url)).toBeDefined();
+  expect(
+    screen.getByText(
+      (content, element) => content.includes("5") && content.includes("likes")
+    )
+  ).toBeDefined();
+
+  expect(handleLike).toHaveBeenCalledTimes(2);
 });
